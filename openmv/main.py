@@ -31,12 +31,12 @@ while(True):
    # detection produces a lot of line segment results.
 
    # `max_theta_diff` controls the maximum amount of rotation difference between
-   # any two lines about to be merged. The default setting allows for 15 degrees.
+   # any two lines about to be merged. The default setting allows for 15 degrees.           10,15,
    img = sensor.snapshot()
    if enable_lens_corr: img.lens_corr(1.8)
    for l in img.find_line_segments(merge_distance = 20, max_theta_diff = 15):
       #if l[1] < 20 and l[3] < 40 and ((int(l[6])<60 or int(l[6])>120)) and l[0]< 120 and l[0]>40:
-      if l.x1() > 40 and l.x1() < 120 and l.y1() < 3 and l.magnitude() > 10 and l.length() > 15 and ((int(l[6])<60 or int(l[6])>120)):
+      if l.x1() > 40 and l.x1() < 120 and l.y1() < 3 and l.magnitude() > 5 and l.length() > 5 and ((int(l[6])<60 or int(l[6])>120)):
           if l[0]<60 and l[6]<90:
             print_args = ('r')
           elif l[6]>90 and l[0] >60:
@@ -56,14 +56,23 @@ while(True):
       # The conversion is nearly 6.2cm to 1 -> translation
       print_args = (tag.x_translation(), tag.y_translation(), tag.z_translation(), \
             degrees(tag.x_rotation()), degrees(tag.y_rotation()), degrees(tag.z_rotation()))
-
+      if tag.x_translation()>1:
+        print_args = ('l')
+        uart.write(("%c" % print_args).encode())
+        #print(("%c" % print_args).encode())
+        time.sleep_ms(500)
+      if tag.x_translation()<-1:
+        print_args = ('r')
+        uart.write(("%c" % print_args).encode())
+        #print(("%c" % print_args).encode())
+        time.sleep_ms(500)
       #print(("%c" % print_args).encode())
       print(tag.z_translation())
       if tag.z_translation() > -6:
         print_args = ('c')
         uart.write(("%c" % print_args).encode())
-        print(("%c" % print_args).encode())
-        time.sleep_ms(500)
+        #print(("%c" % print_args).encode())
+        time.sleep_ms(9000)
       '''else:
         print_args = ('a')
         uart.write(("%c" % print_args).encode())
@@ -77,4 +86,3 @@ while(True):
 
    #print_args = ('n')
    #print("FPS %f" % clock.fps())
-

@@ -60,8 +60,17 @@ def get():
     elif k=='l':
         print ("line")
         s.write("/line/run\n".encode())
+        print("line exit")
+        print("Apriltag")
+        print("Apriltag exit")
         #time.sleep(1)
         #s.write("/stop/run \n".encode())
+    elif k=='d':
+        print ("demo")
+        s.write("/Demo/run\n".encode())
+        print("demo exit")
+        print("Apriltag")
+        print("Apriltag exit")
     elif k==',':
         print ("left")
         s.write("/turn/run 100 0.5 \n".encode())
